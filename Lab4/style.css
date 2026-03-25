@@ -1,0 +1,93 @@
+/* Resetowanie domyślnych marginesów */
+body {
+  margin: 1px;
+  padding: 1px;
+  font-family: Arial, sans-serif;
+}
+
+/* Górny pasek - na stałe przyklejony do góry */
+#top_bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50px;
+  background-color: green;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+  margin: 1px;
+}
+
+/* Logo z żółtym tłem */
+#logo_div {
+  background-color: yellow;
+  height: 100%;
+  padding: 0 15px;
+  display: flex;
+  align-items: center; /* Wyśrodkowanie w pionie */
+  margin: 1px;
+}
+
+#logo_div h1 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+/* Kontener nawigacji wyśrodkowany */
+#nav_container {
+  display: flex;
+  justify-content: center;
+  flex-grow: 1;
+  margin: 1px;
+}
+
+.nav_item {
+  background-color: cyan;
+  margin: 0 0px;
+  padding: 10px 15px;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+/* Główny kontener treści */
+#content_container {
+  width: 30%; /* Wymiar w procentach */
+  margin: 55px auto 0px auto; /* Centrowanie bloku */
+  background-color: orange;
+  padding: 20px;
+  min-height: 1000px; /* Aby umożliwić przewijanie */
+}
+
+/* Przykład użycia kombinatorów CSS */
+.first_list li {
+  color: black;
+  font-weight: bold;
+  font-size: 10px;
+  text-align: right;
+}
+
+.second_list li {
+  color: black;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+/* Stopka strony */
+#footer {
+  width: 100%;
+  background-color: red;
+  color: rgb(0, 0, 0);
+  text-align: center;
+  padding: 10px 0;
+}
+
+/* Wyśrodkowanie tekstu w blokach div (pion/poziom) */
+.nav_item,
+#footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 23px;
+}
