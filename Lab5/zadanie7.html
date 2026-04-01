@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      function dziesietnyNaSzesnastkowy(liczba) {
+        // Jeśli liczba to 0, od razu zwracamy "0"
+        if (liczba === 0) {
+          console.log('0')
+          return
+        }
+
+        // Mapa znaków dla systemu szesnastkowego
+        const znakiHex = '0123456789ABCDEF'
+        let wynik = ''
+        let tempLiczba = liczba
+
+        while (tempLiczba > 0) {
+          // 1. Obliczamy resztę z dzielenia przez 16
+          let reszta = tempLiczba % 16
+
+          // 2. Pobieramy odpowiedni znak z mapy i dodajemy NA POCZĄTEK napisu
+          wynik = znakiHex[reszta] + wynik
+
+          // 3. Dzielimy liczbę całkowicie przez 16
+          tempLiczba = Math.floor(tempLiczba / 16)
+        }
+
+        console.log(wynik)
+      }
+
+      // Przykład użycia:
+      dziesietnyNaSzesnastkowy(255) // Wynik: "FF"
+      dziesietnyNaSzesnastkowy(1000) // Wynik: "3E8"
+      dziesietnyNaSzesnastkowy(16) // Wynik: "10"
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zad 4</title>
+  </head>
+  <body>
+    <script>
+      function obliczSilnie(n) {
+        // Funkcja wewnętrzna (rekurencyjna), która zwraca wartość
+        function rekurencja(n) {
+          // 1. Przypadek bazowy: silnia z 0 lub 1 to 1
+          if (n === 0 || n === 1) {
+            return 1
+          }
+          // 2. Krok rekurencyjny: n! = n * (n - 1)!
+          return n * rekurencja(n - 1)
+        }
+
+        // Obliczamy wynik i wypisujemy go w konsoli
+        const wynik = rekurencja(n)
+        console.log(wynik)
+      }
+
+      // Przykład użycia:
+      obliczSilnie(5) // Wynik: 120 (bo 5 * 4 * 3 * 2 * 1)
+      obliczSilnie(0) // Wynik: 1
+    </script>
+  </body>
+</html>

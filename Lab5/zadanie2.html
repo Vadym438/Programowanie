@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zad 2</title>
+  </head>
+  <body>
+    <script>
+      function wypiszParzyste(a, b) {
+        let parzyste = []
+
+        for (let i = a; i <= b; i++) {
+          if (i % 2 === 0) {
+            parzyste.push(i)
+          }
+        }
+
+        console.log(parzyste)
+      }
+
+      // Przykład użycia:
+      wypiszParzyste(2, 10) // Wynik: [2, 4, 6, 8, 10]
+      wypiszParzyste(5, 15) // Wynik: [6, 8, 10, 12, 14]
+    </script>
+  </body>
+</html>

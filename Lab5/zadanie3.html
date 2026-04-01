@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>zad 3</title>
+  </head>
+  <body>
+    <script>
+      function generujFibonacci(n) {
+        // Jeśli n jest mniejsze lub równe 0, wypisujemy pustą tablicę
+        if (n <= 0) {
+          console.log([])
+          return
+        }
+
+        // Jeśli n wynosi 1, zwracamy tylko pierwszy element
+        if (n === 1) {
+          console.log([0])
+          return
+        }
+
+        // Inicjalizacja tablicy pierwszymi dwoma wyrazami
+        let fibo = [0, 1]
+
+        // Pętla zaczyna od indeksu 2, ponieważ indeksy 0 i 1 już mamy
+        for (let i = 2; i < n; i++) {
+          // Każdy kolejny element to suma dwóch poprzednich
+          fibo[i] = fibo[i - 1] + fibo[i - 2]
+        }
+
+        console.log(fibo)
+      }
+
+      // Przykład użycia:
+      generujFibonacci(8) // Wynik: [0, 1, 1, 2, 3, 5, 8, 13]
+      generujFibonacci(3) // Wynik: [0, 1, 1]
+    </script>
+  </body>
+</html>
