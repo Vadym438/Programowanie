@@ -1,0 +1,132 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      #reset {
+        display: inline-block;
+      }
+      #stop {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1 id="czas"><span id="godziny">00</span>:<span id="minuty">00</span>:<span id="sekundy">00</span></h1>
+    <button id="start">START</button>
+    <button id="zapisz">ZAPISZ</button>
+    <button id="stop">STOP</button>
+    <button id="reset">RESET</button>
+    <p id="stan_stopera"></p>
+    <ul id="zapisane_czasy"></ul>
+    <p id="status"></p>
+    <script>
+      let seconds = 0
+      let minutes = 0
+      let hours = 0
+      let interval = null
+
+      // elementy
+      const czas = document.getElementById('czas')
+      const godzinySpan = document.getElementById('godziny')
+      const minutySpan = document.getElementById('minuty')
+      const sekundySpan = document.getElementById('sekundy')
+
+      const startBtn = document.getElementById('start')
+      const stopBtn = document.getElementById('stop')
+      const zapiszBtn = document.getElementById('zapisz')
+      const resetBtn = document.getElementById('reset')
+      const lista = document.getElementById('zapisane_czasy')
+      const stan_stopera = document.getElementById('stan_stopera')
+
+      // formatowanie (dodanie zera)
+      function format(n) {
+        return n < 10 ? '0' + n : n
+      }
+
+      // aktualizacja wyświetlania
+      function updateDisplay() {
+        godzinySpan.textContent = format(hours)
+        minutySpan.textContent = format(minutes)
+        sekundySpan.textContent = format(seconds)
+      }
+
+      // START
+      startBtn.addEventListener('click', () => {
+        if (interval) return
+
+        interval = setInterval(() => {
+          seconds++
+
+          if (seconds === 60) {
+            seconds = 0
+            minutes++
+          }
+
+          if (minutes === 60) {
+            minutes = 0
+            hours++
+          }
+
+          updateDisplay()
+        }, 1000)
+
+        stan_stopera.textContent = 'Odliczanie...'
+        setButtons('running')
+      })
+
+      // STOP
+      stopBtn.addEventListener('click', () => {
+        clearInterval(interval)
+        interval = null
+
+        stan_stopera.textContent = 'Wstrzymano'
+        setButtons('stopped')
+      })
+
+      // ZAPISZ
+      zapiszBtn.addEventListener('click', () => {
+        const li = document.createElement('li')
+        li.textContent = `${format(hours)}:${format(minutes)}:${format(seconds)}`
+        lista.appendChild(li)
+      })
+
+      // RESET
+      resetBtn.addEventListener('click', () => {
+        clearInterval(interval)
+        interval = null
+
+        seconds = 0
+        minutes = 0
+        hours = 0
+
+        updateDisplay() // <-- to przywraca 00:00:00
+
+        lista.innerHTML = '' // czyści zapisane czasy
+        status.textContent = '' // czyści komunikat
+
+        setButtons('reset')
+      })
+
+      // sterowanie widocznością przycisków
+      function setButtons(state) {
+        startBtn.style.display = 'none'
+        stopBtn.style.display = 'none'
+        resetBtn.style.display = 'none'
+        zapiszBtn.style.display = 'inline-block'
+
+        if (state === 'running') {
+          stopBtn.style.display = 'inline-block'
+        } else if (state === 'stopped') {
+          startBtn.style.display = 'inline-block'
+          resetBtn.style.display = 'inline-block'
+        } else if (state === 'reset') {
+          startBtn.style.display = 'inline-block'
+        }
+      }
+
+      // stan początkowy
+      setButtons('reset')
+      updateDisplay()
+    </script>
+  </body>
+</html>
