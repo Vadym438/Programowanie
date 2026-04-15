@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Formularz rejestracji</title>
+  </head>
+  <body>
+    <h2>Rejestracja</h2>
+
+    <form id="form">
+      Nazwa użytkownika:<br />
+      <input type="text" id="username" /><br /><br />
+
+      E-mail:<br />
+      <input type="text" id="email" /><br /><br />
+
+      Hasło:<br />
+      <input type="password" id="password" /><br /><br />
+
+      Powtórz hasło:<br />
+      <input type="password" id="confirmPassword" /><br /><br />
+
+      Data urodzenia:<br />
+      <input type="date" id="birthdate" /><br /><br />
+
+      Płeć:<br />
+      <select id="gender">
+        <option value="">-- wybierz --</option>
+        <option>Mężczyzna</option>
+        <option>Kobieta</option>
+        <option>Nie chcę podawać</option></select
+      ><br /><br />
+
+      Akceptuję regulamin:
+      <input type="checkbox" id="terms" /><br /><br />
+
+      Wersja:<br />
+      <input type="radio" name="version" value="Darmowa" /> Darmowa<br />
+      <input type="radio" name="version" value="Standardowa" /> Standardowa<br />
+      <input type="radio" name="version" value="Premium" /> Premium<br /><br />
+
+      <button type="button" onclick="validateForm()">Zarejestruj się</button>
+      <button type="reset">Wyczyść</button>
+    </form>
+
+    <p id="message"></p>
+
+    <script>
+      function validateForm() {
+        const msg = document.getElementById('message')
+
+        let username = document.getElementById('username').value
+        let email = document.getElementById('email').value
+        let password = document.getElementById('password').value
+        let confirmPassword = document.getElementById('confirmPassword').value
+        let birthdate = document.getElementById('birthdate').value
+        let gender = document.getElementById('gender').value
+        let terms = document.getElementById('terms').checked
+        let version = document.querySelector('input[name="version"]:checked')
+
+        // Sprawdzenie pustych pól
+        if (!username || !email || !password || !confirmPassword || !birthdate || !gender || !version) {
+          msg.innerText = 'Wszystkie pola muszą być wypełnione!'
+          return
+        }
+
+        // Username tylko alfanumeryczny
+        if (!/^[a-zA-Z0-9]+$/.test(username)) {
+          msg.innerText = 'Nazwa użytkownika może zawierać tylko litery i cyfry!'
+          return
+        }
+
+        // Hasło min 8 znaków i cyfra
+        if (password.length < 8 || !/\d/.test(password)) {
+          msg.innerText = 'Hasło musi mieć min. 8 znaków i zawierać cyfrę!'
+          return
+        }
+
+        // Sprawdzenie zgodności haseł
+        if (password !== confirmPassword) {
+          msg.innerText = 'Hasła nie są takie same!'
+          return
+        }
+
+        // Email
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          msg.innerText = 'Niepoprawny adres e-mail!'
+          return
+        }
+
+        // Pełnoletność
+        let today = new Date()
+        let birth = new Date(birthdate)
+        let age = today.getFullYear() - birth.getFullYear()
+        let m = today.getMonth() - birth.getMonth()
+
+        if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+          age--
+        }
+
+        if (age < 18) {
+          msg.innerText = 'Musisz mieć co najmniej 18 lat!'
+          return
+        }
+
+        // Regulamin
+        if (!terms) {
+          msg.innerText = 'Musisz zaakceptować regulamin!'
+          return
+        }
+
+        // Format daty DD.MM.RRRR
+        let d = birth.getDate().toString().padStart(2, '0')
+        let mth = (birth.getMonth() + 1).toString().padStart(2, '0')
+        let y = birth.getFullYear()
+
+        let maskedPassword = '*'.repeat(password.length)
+
+        msg.innerHTML = `
+        Nazwa użytkownika: ${username}<br>
+        Hasło: ${maskedPassword}<br>
+        Adres e-mail: ${email}<br>
+        Data urodzenia: ${d}.${mth}.${y}<br>
+        Płeć: ${gender}<br>
+        Wybrana wersja: ${version.value}`
+      }
+    </script>
+  </body>
+</html>
