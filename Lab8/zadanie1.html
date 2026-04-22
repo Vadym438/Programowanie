@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Zadanie 1</title>
+</head>
+<body>
+    <form id="userForm">
+        <label for="imie">Imię:</label>
+        <input type="text" id="imie" required><br><br>
+        
+        <label for="nazwisko">Nazwisko:</label>
+        <input type="text" id="nazwisko" required><br><br>
+        
+        <label for="wiek">Wiek:</label>
+        <input type="number" id="wiek" required><br><br>
+        
+        <button type="submit">Wyślij</button>
+    </form>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const user = {
+                imie: document.getElementById('imie').value,
+                nazwisko: document.getElementById('nazwisko').value,
+                wiek: Number(document.getElementById('wiek').value)
+            };
+
+            console.log("Cały obiekt:", user); 
+
+            console.log("Imię:", user.imie);
+            console.log("Nazwisko:", user.nazwisko);
+            console.log("Wiek:", user.wiek);
+
+            const jsonUser = JSON.stringify(user);
+            console.log("JSON:", jsonUser);
+        });
+    </script>
+</body>
+</html>
