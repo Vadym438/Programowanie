@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<title>Clicker Game PRO</title>
+
+<style>
+body {
+  background: linear-gradient(135deg, #1e1e2f, #3a3a6a);
+  color: white;
+  font-family: Arial;
+  text-align: center;
+  margin-top: 40px;
+}
+
+button {
+  background: gold;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  margin: 10px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background: orange;
+}
+
+.panel {
+  margin: 20px;
+}
+</style>
+
+</head>
+<body>
+
+<h1>🍪 Clicker Game PRO</h1>
+
+<div class="panel">
+<p>Punkty: <span id="points">0</span></p>
+<p>Kliknięcia na sekundę: <span id="cps">0</span></p>
+</div>
+
+<button onclick="clickPoint()">Kliknij!</button>
+
+<div class="panel">
+<h2>Ulepszenia</h2>
+
+<button onclick="buyClickUpgrade()">
+Lepsze kliknięcie (koszt: <span id="clickCost">10</span>)
+</button>
+
+<br>
+
+<button onclick="buyPassiveUpgrade()">
+Dochód pasywny (koszt: <span id="passiveCost">20</span>)
+</button>
+</div>
+
+<div class="panel">
+<h2>Przeciwnik</h2>
+<p>Poziom: <span id="enemyLevel">1</span></p>
+<p>HP: <span id="enemyHP">100</span></p>
+</div>
+
+<button onclick="resetGame()" style="background:red;color:white;">
+RESETUJ GRĘ
+</button>
+
+<script>
+let points = 0;
+let clickPower = 1;
+let passiveIncome = 0;
+
+let clickCost = 10;
+let passiveCost = 20;
+
+let clicks = 0;
+let cps = 0;
+
+let enemyLevel = 1;
+let enemyHP = 100;
+
+function loadGame() {
+  const data = JSON.parse(localStorage.getItem("clickerSave"));
+  if (data) {
+    points = data.points;
+    clickPower = data.clickPower;
+    passiveIncome = data.passiveIncome;
+    clickCost = data.clickCost;
+    passiveCost = data.passiveCost;
+    enemyLevel = data.enemyLevel || 1;
+    enemyHP = data.enemyHP || (100 * enemyLevel);
+
+    const now = Date.now();
+    const diff = Math.floor((now - data.lastTime) / 1000);
+    points += diff * passiveIncome;
+  }
+}
+
+function saveGame() {
+  const data = {
+    points,
+    clickPower,
+    passiveIncome,
+    clickCost,
+    passiveCost,
+    enemyLevel,
+    enemyHP,
+    lastTime: Date.now()
+  };
+  localStorage.setItem("clickerSave", JSON.stringify(data));
+}
+
+function resetGame() {
+  localStorage.removeItem("clickerSave");
+
+  points = 0;
+  clickPower = 1;
+  passiveIncome = 0;
+  clickCost = 10;
+  passiveCost = 20;
+  enemyLevel = 1;
+  enemyHP = 100;
+
+  update();
+}
+
+function clickPoint() {
+  points += clickPower;
+  clicks++;
+
+  enemyHP -= clickPower;
+
+  if (enemyHP <= 0) {
+    enemyLevel++;
+    
+    enemyHP = Math.floor(100 * Math.pow(1.5, enemyLevel - 1));
+
+    const reward = 50 * enemyLevel;
+    points += reward;
+
+    alert("Pokonałeś przeciwnika! +" + reward + " punktów");
+  }
+
+  update();
+}
+
+function buyClickUpgrade() {
+  if (points >= clickCost) {
+    points -= clickCost;
+    clickPower++;
+    clickCost = Math.floor(clickCost * 1.5);
+    update();
+  }
+}
+
+function buyPassiveUpgrade() {
+  if (points >= passiveCost) {
+    points -= passiveCost;
+    passiveIncome++;
+    passiveCost = Math.floor(passiveCost * 1.5);
+    update();
+  }
+}
+
+setInterval(() => {
+  cps = clicks;
+  clicks = 0;
+
+  points += cps;
+
+  document.getElementById("cps").innerText = cps;
+  update();
+}, 1000);
+
+setInterval(() => {
+  points += passiveIncome;
+  update();
+}, 1000);
+
+let lastActive = Date.now();
+
+document.addEventListener("visibilitychange", () => {
+  if (document.hidden) {
+    lastActive = Date.now();
+  } else {
+    const now = Date.now();
+    const diff = Math.floor((now - lastActive) / 1000);
+    points += diff * passiveIncome;
+    update();
+  }
+});
+
+function update() {
+  document.getElementById("points").innerText = points;
+  document.getElementById("clickCost").innerText = clickCost;
+  document.getElementById("passiveCost").innerText = passiveCost;
+  document.getElementById("enemyHP").innerText = enemyHP;
+  document.getElementById("enemyLevel").innerText = enemyLevel;
+
+  saveGame();
+}
+
+loadGame();
+update();
+
+</script>
+
+</body>
+</html>
